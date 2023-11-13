@@ -14,7 +14,8 @@
   "fields": {
     "name": "ETS EC 150/5",
     "style": 1,
-    "text": "Sander\nETS EC 150/5"
+    "text": "Sander\nETS EC 150/5",
+    "image": "labels/label/1.jpg"
   }
 }
 ]

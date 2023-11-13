@@ -24,6 +24,7 @@ class Label(models.Model):
         Style, verbose_name=_('style'), on_delete=models.PROTECT, related_name='labels', db_index=True, null=True, blank=True,
     )
     text = models.TextField(blank=True)
+    image = models.FileField(blank=True, upload_to=utils.get_label_image_path)
 
     class Meta:
         verbose_name = _('label')
