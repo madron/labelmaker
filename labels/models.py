@@ -1,7 +1,18 @@
+from copy import copy
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from colorfield.fields import ColorField
 from . import utils
+
+
+TEMPLATE_LAYOUT_DEFAULT = dict(
+    size=dict(x=85.60, y=53.98),
+)
+
+
+def get_template_layout_default():
+    return copy(TEMPLATE_LAYOUT_DEFAULT)
+
 
 
 class Style(models.Model):
@@ -29,6 +40,19 @@ class Label(models.Model):
     class Meta:
         verbose_name = _('label')
         verbose_name_plural = _('labels')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Template(models.Model):
+    name = models.CharField(_('name'), max_length=200)
+    layout = models.JSONField(verbose_name=_('parameters'), default=get_template_layout_default)
+
+    class Meta:
+        verbose_name = _('template')
+        verbose_name_plural = _('templates')
         ordering = ['name']
 
     def __str__(self):

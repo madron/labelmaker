@@ -11,3 +11,8 @@ class StyleAdmin(admin.ModelAdmin):
 @admin.register(models.Label)
 class LabelAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
+
+@admin.register(models.Template)
+class TemplateAdmin(admin.ModelAdmin):
+    list_display = ('name',)

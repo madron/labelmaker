@@ -17,5 +17,18 @@
     "text": "Sander\nETS EC 150/5",
     "image": "labels/label/1.jpg"
   }
+},
+{
+  "model": "labels.template",
+  "pk": 1,
+  "fields": {
+    "name": "id-1",
+    "layout": {
+      "size": {
+        "x": 85.6,
+        "y": 53.98
+      }
+    }
+  }
 }
 ]

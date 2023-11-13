@@ -12,3 +12,9 @@ class LabelTest(TestCase):
     def test_str(self):
         label = factories.LabelFactory(name='air')
         self.assertEqual(str(label), 'air')
+
+
+class TemplateTest(TestCase):
+    def test_str(self):
+        template = factories.TemplateFactory(name='ISO/IEC 7810 - ID-1')
+        self.assertEqual(str(template), 'ISO/IEC 7810 - ID-1')

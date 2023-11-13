@@ -15,3 +15,10 @@ class LabelFactory(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: 'label-{}'.format(n))
     style = factory.SubFactory(StyleFactory)
+
+
+class TemplateFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Template
+
+    name = factory.Sequence(lambda n: 'label-{}'.format(n))
