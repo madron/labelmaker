@@ -3,17 +3,18 @@
   "model": "labels.style",
   "pk": 1,
   "fields": {
-    "name": "Nike",
-    "background": ""
+    "name": "Festool",
+    "background": "#1A232F",
+    "image": "labels/style/1.svg"
   }
 },
 {
   "model": "labels.label",
   "pk": 1,
   "fields": {
-    "name": "Air",
+    "name": "ETS EC 150/5",
     "style": 1,
-    "text": ""
+    "text": "Sander\nETS EC 150/5"
   }
 }
 ]

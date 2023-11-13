@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from colorfield.fields import ColorField
+from . import utils
 
 
 class Style(models.Model):
     name = models.CharField(_('name'), max_length=200)
     background = ColorField(blank=True)
+    image = models.FileField(blank=True, upload_to=utils.get_style_image_path)
 
     class Meta:
         verbose_name = _('style')
