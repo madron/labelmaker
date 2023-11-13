@@ -20,9 +20,8 @@
 },
 {
   "model": "labels.template",
-  "pk": 1,
+  "pk": "id-1",
   "fields": {
-    "name": "id-1",
     "layout": {
       "size": {
         "x": 85.6,

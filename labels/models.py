@@ -47,7 +47,7 @@ class Label(models.Model):
 
 
 class Template(models.Model):
-    name = models.CharField(_('name'), max_length=200)
+    name = models.CharField(_('name'), max_length=50, primary_key=True)
     layout = models.JSONField(verbose_name=_('parameters'), default=get_template_layout_default)
 
     class Meta:
