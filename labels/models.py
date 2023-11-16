@@ -6,13 +6,19 @@ from . import utils
 
 
 TEMPLATE_LAYOUT_DEFAULT = dict(
+    sheet=dict(x=2, y=4, x_space=10, y_space=10),
     size=dict(x=85.60, y=53.98),
+    text=dict(x1=0, x2=55, y1=0, y2=80),
+    image=dict(x1=55, x2=100, y1=0, y2=80),
+    style=dict(
+        background=dict(x1=0, x2=100, y1=80, y2=100),
+        image=dict(x1=55, x2=100, y1=80, y2=100),
+    ),
 )
 
 
 def get_template_layout_default():
     return copy(TEMPLATE_LAYOUT_DEFAULT)
-
 
 
 class Style(models.Model):
