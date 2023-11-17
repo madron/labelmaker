@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path
-from django.utils.translation import gettext as _
 from . import models
 from . import views
 
@@ -28,6 +27,18 @@ class LabelAdmin(admin.ModelAdmin):
         kwargs['extra_context'] = kwargs.get('extra_context', dict())
         kwargs['extra_context']['templates'] = [t.name for t in models.Template.objects.order_by('name')]
         return super().change_view(*args, **kwargs)
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        for template in models.Template.objects.order_by('name'):
+            action_func = lambda modeladmin, request, queryset: self.template_action(request, queryset, template)
+            action_name = 'template_{}'.format(template.name)
+            action_description = 'Template {}'.format(template.name)
+            actions[action_name] = (action_func, action_name, action_description)
+        return actions
+
+    def template_action(self, request, queryset, template):
+        return views.LabelsTemplateView.as_view()(request, queryset=queryset, template=template)
 
 
 @admin.register(models.Template)

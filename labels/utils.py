@@ -34,10 +34,11 @@ def get_sheet_pdf(labels, layout):
     while labels:
         for y in range(sheet_labels_y):
             for x in range(sheet_labels_x):
-                label = labels.pop()
+                label = labels.pop(0)
                 # generate label
                 c.saveState()
-                c.translate(start_x * mm, start_y * mm)
+                label_x, label_y = get_label_x_y(start_x, start_y, x, y, layout)
+                c.translate(label_x * mm, label_y * mm)
                 if sheet_space_x >= 5 and sheet_space_y >=5:
                     c = draw_reference(c, layout)
                 c = draw_label(c, label, layout)
@@ -46,7 +47,7 @@ def get_sheet_pdf(labels, layout):
                     break
             if not labels:
                 break
-    c.showPage()
+        c.showPage()
     c.save()
     file.seek(0)
     return file
@@ -79,24 +80,25 @@ def draw_label(c, label, layout):
     if label.image:
         draw_image(c, label.image.path, x1, x2, y1, y2)
     # Style
-    style = label.style
-    # Style background
-    x1 = layout['style']['background']['x1'] * size_x / 100
-    x2 = layout['style']['background']['x2'] * size_x / 100
-    y1 = layout['style']['background']['y1'] * size_y / 100
-    y2 = layout['style']['background']['y2'] * size_y / 100
-    if style.background:
-        c.saveState()
-        c.setFillColor(colors.HexColor(style.background))
-        c.rect(x1 * mm, y1 * mm, (x2 - x1) * mm, (y2 - y1) * mm, stroke=0, fill=1)
-        c.restoreState()
-    # Style image
-    x1 = layout['style']['image']['x1'] * size_x / 100
-    x2 = layout['style']['image']['x2'] * size_x / 100
-    y1 = layout['style']['image']['y1'] * size_y / 100
-    y2 = layout['style']['image']['y2'] * size_y / 100
-    if style.image:
-        draw_image(c, style.image.path, x1, x2, y1, y2)
+    if label.style:
+        style = label.style
+        # background
+        x1 = layout['style']['background']['x1'] * size_x / 100
+        x2 = layout['style']['background']['x2'] * size_x / 100
+        y1 = layout['style']['background']['y1'] * size_y / 100
+        y2 = layout['style']['background']['y2'] * size_y / 100
+        if style.background:
+            c.saveState()
+            c.setFillColor(colors.HexColor(style.background))
+            c.rect(x1 * mm, y1 * mm, (x2 - x1) * mm, (y2 - y1) * mm, stroke=0, fill=1)
+            c.restoreState()
+        # image
+        x1 = layout['style']['image']['x1'] * size_x / 100
+        x2 = layout['style']['image']['x2'] * size_x / 100
+        y1 = layout['style']['image']['y1'] * size_y / 100
+        y2 = layout['style']['image']['y2'] * size_y / 100
+        if style.image:
+            draw_image(c, style.image.path, x1, x2, y1, y2)
     return c
 
 
