@@ -24,6 +24,11 @@ class LabelAdmin(admin.ModelAdmin):
         ]
         return urls + super().get_urls()
 
+    def change_view(self, *args, **kwargs):
+        kwargs['extra_context'] = kwargs.get('extra_context', dict())
+        kwargs['extra_context']['templates'] = [t.name for t in models.Template.objects.order_by('name')]
+        return super().change_view(*args, **kwargs)
+
 
 @admin.register(models.Template)
 class TemplateAdmin(admin.ModelAdmin):

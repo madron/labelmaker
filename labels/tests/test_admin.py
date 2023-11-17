@@ -63,7 +63,7 @@ class LabelAdminTest(TestCase):
     def test_detail(self):
         obj = factories.LabelFactory()
         url = reverse('admin:labels_label_change', args=(obj.pk,))
-        with self.assertNumQueries(6):
+        with self.assertNumQueries(7):
             response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
