@@ -46,7 +46,7 @@ class LabelAdminTest(TestCase):
         self.list = reverse('admin:labels_label_changelist')
 
     def test_list(self):
-        with self.assertNumQueries(5):
+        with self.assertNumQueries(8):
             response = self.client.get(self.list)
         self.assertEqual(response.status_code, 200)
 

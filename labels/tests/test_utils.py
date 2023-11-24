@@ -49,7 +49,7 @@ class GetStartLabelXYTest(TestCase):
             sheet=dict(format='A4', x=2, y=4, space_x=10, space_y=10),
             size=dict(x=85.60, y=53.98),
         )
-        self.assertEqual(utils.get_start_label_x_y(layout), (14.4, 25.54))
+        self.assertEqual(utils.get_start_label_x_y(layout), (14.4, 217.48))
 
 
 class GetLabelXYTest(TestCase):
@@ -60,5 +60,5 @@ class GetLabelXYTest(TestCase):
         )
         self.assertEqual(utils.get_label_x_y(20, 20, 0, 0, layout), (20, 20))
         self.assertEqual(utils.get_label_x_y(20, 20, 1, 0, layout), (120, 20))
-        self.assertEqual(utils.get_label_x_y(20, 20, 0, 1, layout), (20, 90))
-        self.assertEqual(utils.get_label_x_y(20, 20, 1, 1, layout), (120, 90))
+        self.assertEqual(utils.get_label_x_y(20, 20, 0, 1, layout), (20, -50))
+        self.assertEqual(utils.get_label_x_y(20, 20, 1, 1, layout), (120, -50))

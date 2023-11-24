@@ -3,8 +3,11 @@ from pathlib import Path
 from reportlab.graphics import renderPDF
 from reportlab.lib import colors
 from reportlab.lib import pagesizes
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
+from reportlab.platypus import Paragraph, Table, TableStyle
 from svglib.svglib import svg2rlg
 
 
@@ -23,7 +26,7 @@ def get_label_pdf(label, layout):
 def get_sheet_pdf(labels, layout):
     pagesize = getattr(pagesizes, layout['sheet']['format'])
     file = io.BytesIO()
-    c = canvas.Canvas(file, pagesize=pagesize, bottomup=False)
+    c = canvas.Canvas(file, pagesize=pagesize)
     # data
     sheet_labels_x = layout['sheet']['x']
     sheet_labels_y = layout['sheet']['y']
@@ -69,42 +72,48 @@ def draw_reference(c, layout):
     return c
 
 
+def draw_text(c, text, x1, x2, y1, y2, **style_parameters):
+    return c
+
+
 def draw_label(c, label, layout):
-    size_x = layout['size']['x']
-    size_y = layout['size']['y']
     # Image
-    x1 = layout['image']['x1'] * size_x / 100
-    x2 = layout['image']['x2'] * size_x / 100
-    y1 = layout['image']['y1'] * size_y / 100
-    y2 = layout['image']['y2'] * size_y / 100
     if label.image:
+        x1, x2, y1, y2 = get_x12_y12(layout['image'], layout['size'])
         draw_image(c, label.image.path, x1, x2, y1, y2)
+    # Text
+    if label.text:
+        x1, x2, y1, y2 = get_x12_y12(layout['text'], layout['size'])
+        draw_text(c, label.text, x1, x2, y1, y2)
     # Style
     if label.style:
         style = label.style
         # background
-        x1 = layout['style']['background']['x1'] * size_x / 100
-        x2 = layout['style']['background']['x2'] * size_x / 100
-        y1 = layout['style']['background']['y1'] * size_y / 100
-        y2 = layout['style']['background']['y2'] * size_y / 100
         if style.background:
+            x1, x2, y1, y2 = get_x12_y12(layout['style']['background'], layout['size'])
             c.saveState()
             c.setFillColor(colors.HexColor(style.background))
             c.rect(x1 * mm, y1 * mm, (x2 - x1) * mm, (y2 - y1) * mm, stroke=0, fill=1)
             c.restoreState()
         # image
-        x1 = layout['style']['image']['x1'] * size_x / 100
-        x2 = layout['style']['image']['x2'] * size_x / 100
-        y1 = layout['style']['image']['y1'] * size_y / 100
-        y2 = layout['style']['image']['y2'] * size_y / 100
         if style.image:
+            x1, x2, y1, y2 = get_x12_y12(layout['style']['image'], layout['size'])
             draw_image(c, style.image.path, x1, x2, y1, y2)
     return c
 
 
+def get_x12_y12(coords, size):
+    size_x = size['x']
+    size_y = size['y']
+    x1 = round(coords['x1'] * size_x / 100, 6)
+    x2 = round(coords['x2'] * size_x / 100, 6)
+    y1 = round((100 - coords['y2']) * size_y / 100, 6)
+    y2 = round((100 - coords['y1']) * size_y / 100, 6)
+    return x1, x2, y1, y2
+
+
 def draw_image(c, image_path, x1, x2, y1, y2):
     c.saveState()
-    c.scale(1,-1)
     if Path(image_path).suffix == '.svg':
         drawing = svg2rlg(image_path)
         box_x = (x2 -x1) * mm
@@ -116,10 +125,10 @@ def draw_image(c, image_path, x1, x2, y1, y2):
         scaled_x = drawing.width * scale
         scaled_y = drawing.height * scale
         x = x1 * mm + ((x2 - x1) * mm - scaled_x) / 2
-        y = - y1 * mm - ((y2 - y1) * mm - scaled_y) / 2 - scaled_y
+        y = y1 * mm + ((y2 - y1) * mm - scaled_y) / 2
         renderPDF.draw(drawing, c, x, y)
     else:
-        c.drawImage(image_path, x1 * mm, -y2 * mm, width=(x2 - x1) * mm, height=(y2 - y1) * mm, preserveAspectRatio=True, mask='auto')
+        c.drawImage(image_path, x1 * mm, y1 * mm, width=(x2 - x1) * mm, height=(y2 - y1) * mm, preserveAspectRatio=True, mask='auto')
     c.restoreState()
 
 
@@ -136,7 +145,7 @@ def get_start_label_x_y(layout):
     total_x = sheet_labels_x * label_size_x + (sheet_labels_x -1) * sheet_space_x
     total_y = sheet_labels_y * label_size_y + (sheet_labels_y -1) * sheet_space_y
     x = (sheet_size_x - total_x) / 2
-    y = (sheet_size_y - total_y) / 2
+    y = sheet_size_y - (sheet_size_y - total_y) / 2 - label_size_y
     return round(x, 6), round(y, 6)
 
 
@@ -146,5 +155,5 @@ def get_label_x_y(start_x, start_y, x, y, layout):
     sheet_space_x = layout['sheet']['space_x']
     sheet_space_y = layout['sheet']['space_y']
     x = start_x + x * (label_size_x + sheet_space_x )
-    y = start_y + y * (label_size_y + sheet_space_y )
+    y = start_y - y * (label_size_y + sheet_space_y )
     return round(x, 6), round(y, 6)
