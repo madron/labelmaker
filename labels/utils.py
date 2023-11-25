@@ -73,6 +73,19 @@ def draw_reference(c, layout):
 
 
 def draw_text(c, text, x1, x2, y1, y2, **style_parameters):
+    size_x = x2 - x1
+    size_y = y2 - y1
+    text = text.strip()
+    text = text.replace('\n', '<br/>')
+    # Style
+    style_parameters['fontSize'] = style_parameters.get('fontSize', size_y * mm / 5 / 1.2)
+    style_parameters['leading'] = style_parameters.get('leading', style_parameters['fontSize'] * 1.2)
+    style_parameters['alignment'] = style_parameters.get('alignment', TA_CENTER)
+    style = ParagraphStyle('', **style_parameters)
+    t = Table([[Paragraph(text, style)]], colWidths=[size_x * mm], rowHeights=[size_y * mm])
+    t.setStyle(TableStyle([('VALIGN',(-1,-1),(-1,-1),'MIDDLE')]))
+    t.wrapOn(c, size_x * mm, size_y * mm)
+    t.drawOn(c, x1 * mm, y1 * mm)
     return c
 
 
@@ -83,8 +96,10 @@ def draw_label(c, label, layout):
         draw_image(c, label.image.path, x1, x2, y1, y2)
     # Text
     if label.text:
+        rows = layout['text'].get('rows', 5)
         x1, x2, y1, y2 = get_x12_y12(layout['text'], layout['size'])
-        draw_text(c, label.text, x1, x2, y1, y2)
+        fontSize = (y2 - y1) * mm / rows / 1.2
+        draw_text(c, label.text, x1, x2, y1, y2, fontSize=fontSize)
     # Style
     if label.style:
         style = label.style
