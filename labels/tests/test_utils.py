@@ -7,32 +7,22 @@ from .. import utils
 
 class GetStyleImagePathTest(TestCase):
     def test_svg(self):
-        obj = factories.StyleFactory(id=1)
-        self.assertEqual(utils.get_style_image_path(obj, 'nike.svg'), 'labels/style/1.svg')
+        obj = factories.StyleFactory(name='Nike Shoes')
+        self.assertEqual(utils.get_style_image_path(obj, 'nike.svg'), 'labels/style/nike-shoes.svg')
 
     def test_jpg(self):
-        obj = factories.StyleFactory(id=9)
-        self.assertEqual(utils.get_style_image_path(obj, 'nike.jpg'), 'labels/style/9.jpg')
+        obj = factories.StyleFactory(name='Samsung')
+        self.assertEqual(utils.get_style_image_path(obj, 'img.jpg'), 'labels/style/samsung.jpg')
 
 
 class GetLabelImagePathTest(TestCase):
     def test_png(self):
-        obj = factories.LabelFactory(id=1)
-        self.assertEqual(utils.get_label_image_path(obj, 'air.png'), 'labels/label/1.png')
+        obj = factories.LabelFactory(name='Nike Air')
+        self.assertEqual(utils.get_label_image_path(obj, 'air.png'), 'labels/label/nike-air.png')
 
     def test_jpg(self):
-        obj = factories.LabelFactory(id=9)
-        self.assertEqual(utils.get_label_image_path(obj, 'air.jpg'), 'labels/label/9.jpg')
-
-
-class GetLabelImagePathTest(TestCase):
-    def test_png(self):
-        obj = factories.LabelFactory(id=1)
-        self.assertEqual(utils.get_label_image_path(obj, 'air.png'), 'labels/label/1.png')
-
-    def test_jpg(self):
-        obj = factories.LabelFactory(id=9)
-        self.assertEqual(utils.get_label_image_path(obj, 'air.jpg'), 'labels/label/9.jpg')
+        obj = factories.LabelFactory(name='Nike')
+        self.assertEqual(utils.get_label_image_path(obj, 'air.jpg'), 'labels/label/nike.jpg')
 
 
 class GetLabelPdfTest(TestCase):

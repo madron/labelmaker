@@ -1,5 +1,6 @@
 import io
 from pathlib import Path
+from django.utils.text import slugify
 from reportlab.graphics import renderPDF
 from reportlab.lib import colors
 from reportlab.lib import pagesizes
@@ -12,11 +13,11 @@ from svglib.svglib import svg2rlg
 
 
 def get_style_image_path(instance, filename):
-    return 'labels/style/{}{}'.format(instance.pk, Path(filename).suffix)
+    return 'labels/style/{}{}'.format(slugify(instance.name), Path(filename).suffix)
 
 
 def get_label_image_path(instance, filename):
-    return 'labels/label/{}{}'.format(instance.pk, Path(filename).suffix)
+    return 'labels/label/{}{}'.format(slugify(instance.name), Path(filename).suffix)
 
 
 def get_label_pdf(label, layout):
