@@ -43,8 +43,10 @@ def get_sheet_pdf(labels, layout):
                 c.saveState()
                 label_x, label_y = get_label_x_y(start_x, start_y, x, y, layout)
                 c.translate(label_x * mm, label_y * mm)
-                if sheet_space_x >= 5 and sheet_space_y >=5:
-                    c = draw_reference(c, layout)
+                if sheet_space_x >= 5:
+                    c = draw_reference_horizontal(c, layout)
+                if sheet_space_y >= 5:
+                    c = draw_reference_vertical(c, layout)
                 c = draw_label(c, label, layout)
                 c.restoreState()
                 if not labels:
@@ -57,7 +59,7 @@ def get_sheet_pdf(labels, layout):
     return file
 
 
-def draw_reference(c, layout):
+def draw_reference_horizontal(c, layout):
     size_x = layout['size']['x']
     size_y = layout['size']['y']
     # Horizontal
@@ -65,6 +67,12 @@ def draw_reference(c, layout):
     c.rect((size_x + 1) * mm,           0, 3 * mm, 0)
     c.rect(          -4 * mm, size_y * mm, 3 * mm, 0)
     c.rect((size_x + 1) * mm, size_y * mm, 3 * mm, 0)
+    return c
+
+
+def draw_reference_vertical(c, layout):
+    size_x = layout['size']['x']
+    size_y = layout['size']['y']
     # Vertical
     c.rect(          0,           -4 * mm, 0, 3 * mm)
     c.rect(          0, (size_y + 1) * mm, 0, 3 * mm)
