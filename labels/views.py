@@ -41,6 +41,7 @@ class LabelsTemplateView(PermissionRequiredMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         self.template = kwargs['template']
+        self.queryset = kwargs['queryset']
         return super().get(request, *args, **kwargs)
 
     def render_to_response(self, context, **response_kwargs):
