@@ -79,6 +79,7 @@ def draw_text(c, text, x1, x2, y1, y2, **style_parameters):
     text = text.strip()
     text = text.replace('\n', '<br/>')
     # Style
+    # style_parameters['fontName'] = style_parameters.get('fontName', 'Helvetica-Bold')
     style_parameters['fontSize'] = style_parameters.get('fontSize', size_y * mm / 5 / 1.2)
     style_parameters['leading'] = style_parameters.get('leading', style_parameters['fontSize'] * 1.2)
     style_parameters['alignment'] = style_parameters.get('alignment', TA_CENTER)

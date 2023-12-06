@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from . import forms
 from . import models
 from . import views
 
@@ -44,3 +45,4 @@ class LabelAdmin(admin.ModelAdmin):
 @admin.register(models.Template)
 class TemplateAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    form = forms.TemplateForm
