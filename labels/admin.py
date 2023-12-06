@@ -39,6 +39,9 @@ class LabelAdmin(admin.ModelAdmin):
         return actions
 
     def template_action(self, request, queryset, template):
+        action_name = request.POST['action']
+        template_name = action_name.lstrip('template_')
+        template = models.Template.objects.get(name=template_name)
         return views.LabelsTemplateView.as_view()(request, queryset=queryset, template=template)
 
 
